@@ -313,15 +313,33 @@ newEnregristrer.addEventListener("click",() => {
 
 
 
-// Ajouter le bouton Annuler
-const annulerBtn = document.getElementById('button-remove-transaction');
+// // Ajouter le bouton Annuler
+// const annulerBtn = document.getElementById('button-remove-transaction');
 
-// Gérer l'événement click sur le bouton Annuler
-annulerBtn.addEventListener('click', () => {
-  // Ajouter le montant de la transaction annulée au solde du client actuel
-  clients[current].solde += montant;
-  // Retirer la dernière transaction du client actuel
-//   clients[current].transactions.pop();
-  // Remplir la fiche client avec les nouvelles informations
-  remplirClient(clients[current]);
-});
+// // Gérer l'événement click sur le bouton Annuler
+// annulerBtn.addEventListener('click', () => {
+//   // Ajouter le montant de la transaction annulée au solde du client actuel
+//   clients[current].solde += montant;
+//   // Retirer la dernière transaction du client actuel
+// //   clients[current].transactions.pop();
+//   // Remplir la fiche client avec les nouvelles informations
+//   remplirClient(clients[current]);
+// });
+
+
+// Fonction pour annuler une transaction
+function annulerTransaction(transaction) {
+    // Trouver les comptes expéditeur et destinataire correspondant à la transaction
+    const expediteur = transaction.type === -1 ? clients[current] : chercheClientByNumero(tel1);
+    const destinataire = transaction.type === -1 ? chercheClientByNumero(tel1) : clients[current];
+    
+    // Ajouter le montant de la transaction annulée au solde de l'expéditeur
+    expediteur.solde += transaction.montant;
+    
+    // Supprimer la transaction des comptes de l'expéditeur et du destinataire
+    expediteur.transactions.splice(expediteur.transactions.indexOf(transaction), 1);
+    destinataire.transactions.splice(destinataire.transactions.indexOf(transaction), 1);
+    
+    // Mettre à jour l'affichage des comptes de l'expéditeur et du destinataire
+    remplirClient(expediteur);
+    remplirClient(destinataire);
